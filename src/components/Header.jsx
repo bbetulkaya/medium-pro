@@ -11,10 +11,10 @@ export default function Header() {
       </Link>
 
       <nav className="flex gap-4">
-        <Link href={"/login"} className="">
+        <Link href={"auth/login"} className="">
           Login
         </Link>
-        <Link href={"/register"}>Register</Link>
+        <Link href={"auth/register"}>Register</Link>
       </nav>
     </header>
   );

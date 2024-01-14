@@ -1,12 +1,27 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
+import { signIn } from "next-auth/react";
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+
   async function handleLogin(e) {
-    
+    e.preventDefault();
+
+    const result = await signIn("credentials", {
+      username,
+      password,
+      redirect: false, // Set to true if you want to handle redirection manually
+    });
+
+    if (result.error) {
+      // Handle login error
+      console.error("Authentication failed:", result.error);
+    } else {
+      // Redirect to the intended page after successful login
+      router.push("/"); // Change to your desired redirect path
+    }
   }
 
   return (
