@@ -12,12 +12,18 @@ export default NextAuth({
           await connectDB();
 
           const user = await User.findOne({ username: credentials.username });
+
           if (user && bcrypt.compareSync(credentials.password, user.password)) {
-            return Promise.resolve({ id: user._id, username: user.username });
+            const userObject = {
+              id: user._id.toString(),
+              username: user.username,
+            };
+            return Promise.resolve(userObject);
           } else {
             return Promise.resolve(null);
           }
         } catch (error) {
+          console.error("Error in authorize:", error);
           return Promise.resolve(null);
         }
       },
@@ -31,17 +37,20 @@ export default NextAuth({
     newUser: null,
   },
   callbacks: {
-    async jwt(token, user) {
+    session: async ({ session, token }) => {
+      if (session?.user) {
+        session.user.id = token.sub;
+      }
+      return session;
+    },
+    jwt: async ({ user, token }) => {
       if (user) {
-        token.id = user.id;
-        token.username = user.username;
+        token.sub = user.id;
       }
       return token;
     },
-    async session(session, token) {
-      session.user.id = token.id;
-      session.user.username = token.username;
-      return session;
-    },
+  },
+  session: {
+    strategy: "jwt",
   },
 });
