@@ -31,11 +31,7 @@ export default NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signout",
-    error: "/auth/error",
-    verifyRequest: "/auth/verify-request",
-    newUser: null,
+    signIn: "/auth/login",
   },
   callbacks: {
     session: async ({ session, token }) => {
