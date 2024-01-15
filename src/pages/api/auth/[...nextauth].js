@@ -4,7 +4,7 @@ import connectDB from "../../../../utils/db";
 import User from "../../../../models/User"; // Update the path accordingly
 import bcrypt from "bcrypt";
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
@@ -50,4 +50,6 @@ export default NextAuth({
   session: {
     strategy: "jwt",
   },
-});
+};
+
+export default NextAuth(authOptions);
