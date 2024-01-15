@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
       // Get the user's session
       const session = await getServerSession(req, res, authOptions);
-      
+
       // Check if the user is authenticated
       if (!session) {
         return res.status(401).json({ message: "Unauthorized" });
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
 
       // Save the post to the database
       const savedPost = await newPost.save();
+      res.json({ savedPost });
     } catch (err) {}
   }
 }
