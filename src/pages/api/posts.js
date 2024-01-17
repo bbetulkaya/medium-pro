@@ -45,17 +45,27 @@ export default async function handler(req, res) {
       // Get the postId from the query parameters
       const { postId } = req.query;
 
-      // Fetch the post from the database using the postId
-      const post = await Post.findById(postId).populate({
-        path: "author",
-        select: "-password",
-      });
+      if (!postId) {
+        // Fetch all posts from the database, sorted by createdAt in descending order
+        const posts = await Post.find().sort({ createdAt: -1 }).populate({
+          path: "author",
+          select: "-password",
+        });
 
-      if (!post) {
-        return res.status(404).json({ error: "Post not found" });
+        return res.status(200).json(posts);
+      } else {
+        // Fetch the post from the database using the postId
+        const post = await Post.findById(postId).populate({
+          path: "author",
+          select: "-password",
+        });
+
+        if (!post) {
+          return res.status(404).json({ error: "Post not found" });
+        }
+
+        return res.status(200).json(post);
       }
-
-      return res.status(200).json(post);
     } catch (err) {
       console.error("Error fetching post:", err);
       return res.status(500).json({ error: "Internal Server Error" });
