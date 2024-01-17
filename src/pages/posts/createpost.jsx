@@ -13,24 +13,39 @@ const CreatePost = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [title, setTitle] = useState("");
+  const [cover, setCover] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
 
   async function handleCreatePost(e) {
     e.preventDefault();
     const response = await axios.post("/api/posts", {
+      cover,
       title,
       summary,
       content,
     });
 
-    console.log(response);
+    if (response.status === 201) {
+      // Redirect to the newly created post page or homepage
+      router.push(`/posts/${response.data._id}`);
+    } else {
+      console.error("Failed to create post");
+    }
   }
   return (
     <Layout>
       <div>
         <h1>Create a New Post</h1>
         <form onSubmit={handleCreatePost}>
+          <label>
+            Cover Image:
+            <input
+              type="text"
+              value={cover}
+              onChange={(e) => setCover(e.target.value)}
+            />
+          </label>
           <label>
             Title:
             <input

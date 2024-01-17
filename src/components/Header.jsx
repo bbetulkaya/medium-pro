@@ -14,7 +14,7 @@ export default function Header() {
       <nav className="flex gap-4 items-center">
         {session ? (
           <>
-            <Link href={"/createpost"}>Create a New Post</Link>
+            <Link href={"/posts/createpost"}>Create a New Post</Link>
             <LogoutButton />
           </>
         ) : (
